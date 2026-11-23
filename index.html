@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Языковая студия Light</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Manrope', sans-serif;
+    background: #050610;
+    color: #f0f2ff;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.background {
+    position: fixed; inset: 0; z-index: -2;
+    background: radial-gradient(ellipse at 30% 20%, #1e1b4b 0%, #050610 60%);
+}
+.blob {
+    position: fixed; border-radius: 50%;
+    filter: blur(80px); opacity: 0.5; z-index: -1;
+    animation: float 20s ease-in-out infinite alternate;
+}
+.blob-1 { width: 460px; height: 460px; background: #ff9e9e; top: -120px; left: -100px; }
+.blob-2 { width: 400px; height: 400px; background: #8c56ff; bottom: -140px; right: -90px; animation-delay: -6s; }
+.blob-3 { width: 320px; height: 320px; background: #4dd0ff; top: 45%; left: 55%; opacity: 0.35; animation-delay: -11s; }
+
+@keyframes float {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(70px, -50px) scale(1.15); }
+    100% { transform: translate(-50px, 60px) scale(0.9); }
+}
+
+.stars {
+    position: fixed; inset: 0; z-index: -1;
+    background-image:
+        radial-gradient(1.5px 1.5px at 20% 30%, #fff 100%, transparent),
+        radial-gradient(1px 1px at 40% 70%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 60% 20%, #fff 100%, transparent),
+        radial-gradient(1px 1px at 80% 50%, #fff 100%, transparent),
+        radial-gradient(1px 1px at 10% 80%, #fff 100%, transparent),
+        radial-gradient(1.5px 1.5px at 90% 85%, #fff 100%, transparent),
+        radial-gradient(1px 1px at 50% 45%, #fff 100%, transparent),
+        radial-gradient(1px 1px at 30% 10%, #fff 100%, transparent);
+    animation: twinkle 4s ease-in-out infinite alternate;
+}
+@keyframes twinkle { from { opacity: 0.2; } to { opacity: 0.8; } }
+
+.hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 0 6vw;
+}
+
+.actions {
+    display: flex; gap: 18px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 48px;
+    animation: fadeUp 1s ease both;
+}
+.glow-btn {
+    padding: 15px 34px; border-radius: 40px;
+    font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.95em;
+    color: #fff; cursor: pointer;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(12px);
+    transition: 0.35s;
+}
+.glow-btn:nth-child(1):hover { border-color: #ff9e9e; box-shadow: 0 0 30px rgba(255,158,158,0.45); transform: translateY(-3px); }
+.glow-btn:nth-child(2):hover { border-color: #8c56ff; box-shadow: 0 0 30px rgba(140,86,255,0.45); transform: translateY(-3px); }
+.glow-btn:nth-child(3):hover { border-color: #4dd0ff; box-shadow: 0 0 30px rgba(77,208,255,0.45); transform: translateY(-3px); }
+
+.tag {
+    font-size: 0.85em; letter-spacing: 4px; text-transform: uppercase;
+    color: #8c56ff; margin-bottom: 22px;
+    animation: fadeUp 1s 0.2s ease both;
+}
+h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(1.8em, 5.5vw, 4.2em);
+    font-weight: 800; line-height: 1.2;
+    margin-bottom: 26px;
+    background: linear-gradient(120deg, #fff 30%, #ff9e9e 60%, #4dd0ff 90%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeUp 1s 0.35s ease both;
+}
+.hero p {
+    max-width: 560px; color: #aeb2d8; font-size: 1.1em; line-height: 1.7;
+    animation: fadeUp 1s 0.5s ease both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.overlay {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(5, 6, 16, 0.7);
+    backdrop-filter: blur(6px);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+}
+.overlay.open { display: flex; }
+.modal {
+    background: rgba(20, 20, 45, 0.9);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 24px; padding: 40px 36px;
+    max-width: 480px; width: 100%;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    animation: pop 0.35s ease both;
+    position: relative;
+}
+@keyframes pop {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal h3 {
+    font-family: 'Unbounded', sans-serif; font-size: 1.2em;
+    margin-bottom: 22px;
+    background: linear-gradient(90deg, #fff, #8c56ff);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.modal .close {
+    position: absolute; top: 16px; right: 20px;
+    background: none; border: none; color: #aeb2d8;
+    font-size: 1.5em; cursor: pointer; transition: 0.3s;
+}
+.modal .close:hover { color: #fff; transform: rotate(90deg); }
+
+.modal a.phone {
+    display: block; padding: 14px 20px; margin-bottom: 12px;
+    border-radius: 14px; text-decoration: none;
+    color: #fff; font-weight: 600;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: 0.3s;
+}
+.modal a.phone:hover { border-color: #4dd0ff; transform: translateX(6px); }
+.modal .note { color: #aeb2d8; font-size: 0.9em; line-height: 1.7; }
+
+.quiz-q { margin-bottom: 20px; }
+.quiz-q p { font-weight: 600; margin-bottom: 10px; }
+.quiz-q label {
+    display: block; padding: 10px 16px; margin-bottom: 8px;
+    border-radius: 12px; cursor: pointer; font-size: 0.95em;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.25s;
+}
+.quiz-q label:hover { border-color: #8c56ff; background: rgba(140,86,255,0.15); }
+.quiz-result { margin-top: 18px; font-weight: 700; display: none; }
+
+footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    text-align: center; padding: 16px;
+    color: #7a7ea6; font-size: 0.8em;
+    pointer-events: none;
+}
+
+@media (max-width: 640px) {
+    .actions { gap: 12px; }
+    .glow-btn { padding: 13px 24px; font-size: 0.85em; }
+}
+</style>
+</head>
+<body>
+
+<div class="background"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="stars"></div>
+
+<header class="hero">
+    <div class="actions">
+        <button class="glow-btn" onclick="openModal('modal-phone')">📞 Номера телефонов</button>
+        <button class="glow-btn" onclick="openModal('modal-address')">📍 Адрес</button>
+        <button class="glow-btn" onclick="openModal('modal-quiz')">✏️ Мини-тест</button>
+    </div>
+
+    <div class="tag">Добро пожаловать</div>
+    <h1>Языковая студия<br>Light</h1>
+    <p>Английский и другие языки — легко, светло и с удовольствием. Маленькие группы, живые уроки и результат, который видно.</p>
+</header>
+
+<!-- ОКНО: ТЕЛЕФОНЫ -->
+<div class="overlay" id="modal-phone" onclick="outsideClick(event, this)">
+    <div class="modal">
+        <button class="close" onclick="closeModal('modal-phone')">✕</button>
+        <h3>Наши телефоны</h3>
+        <a class="phone" href="tel:+79135877378">+7 (913) 587-73-78 — Админ</a>
+    </div>
+</div>
+
+<!-- ОКНО: АДРЕС -->
+<div class="overlay" id="modal-address" onclick="outsideClick(event, this)">
+    <div class="modal">
+        <button class="close" onclick="closeModal('modal-address')">✕</button>
+        <h3>Как нас найти</h3>
+        <p class="note" style="font-size:1.05em;">
+            📍 г. Сосновоборск, ул. Ленинского Комсомола, 40, 2 корпус
+        </p>
+        <p class="note">Ждём тебя!</p>
+    </div>
+</div>
+
+<!-- ОКНО: МИНИ-ТЕСТ -->
+<div class="overlay" id="modal-quiz" onclick="outsideClick(event, this)">
+    <div class="modal">
+        <button class="close" onclick="closeModal('modal-quiz')">✕</button>
+        <h3>Мини-тест</h3>
+        <form id="quiz">
+            <div class="quiz-q">
+                <p>1. Как переводится «to improve»?</p>
+                <label><input type="radio" name="q1" value="a"> улучшать</label>
+                <label><input type="radio" name="q1" value="b"> удалять</label>
+                <label><input type="radio" name="q1" value="c"> изобретать</label>
+            </div>
+            <div class="quiz-q">
+                <p>2. Выбери правильный вариант: She ___ to school every day.</p>
+                <label><input type="radio" name="q2" value="a"> go</label>
+                <label><input type="radio" name="q2" value="b"> goes</label>
+                <label><input type="radio" name="q2" value="c"> going</label>
+            </div>
+            <div class="quiz-q">
+                <p>3. Как переводится «brave»?</p>
+                <label><input type="radio" name="q3" value="a"> грустный</label>
+                <label><input type="radio" name="q3" value="b"> быстрый</label>
+                <label><input type="radio" name="q3" value="c"> смелый</label>
+            </div>
+            <div class="quiz-q">
+                <p>4. «I have lived here ___ 2020» — какое слово пропущено?</p>
+                <label><input type="radio" name="q4" value="a"> since</label>
+                <label><input type="radio" name="q4" value="b"> for</label>
+                <label><input type="radio" name="q4" value="c"> from</label>
+            </div>
+            <div class="quiz-q">
+                <p>5. Как переводится «experience»?</p>
+                <label><input type="radio" name="q5" value="a"> эксперимент</label>
+                <label><input type="radio" name="q5" value="b"> опыт</label>
+                <label><input type="radio" name="q5" value="c"> экскурсия</label>
+            </div>
+            <button type="button" class="glow-btn" style="width:100%; margin-top:8px;" onclick="checkQuiz()">Проверить</button>
+        </form>
+        <div class="quiz-result" id="quiz-result"></div>
+    </div>
+</div>
+
+<footer>© 2026 Языковая студия Light</footer>
+
+<script>
+function openModal(id) {
+    document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+}
+function outsideClick(e, overlay) {
+    if (e.target === overlay) overlay.classList.remove('open');
+}
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') document.querySelectorAll('.overlay.open')
+        .forEach(o => o.classList.remove('open'));
+});
+
+function checkQuiz() {
+    const answers = { q1: 'a', q2: 'b', q3: 'c', q4: 'a', q5: 'b' };
+    let score = 0;
+    for (const q in answers) {
+        const chosen = document.querySelector(`input[name="${q}"]:checked`);
+        if (chosen && chosen.value === answers[q]) score++;
+    }
+    const result = document.getElementById('quiz-result');
+    result.style.display = 'block';
+    const percent = Math.round(score / 5 * 100);
+    if (score === 5)      result.innerHTML = `🏆 Блестяще: ${score} из 5 (${percent}%)!`;
+    else if (score >= 3)  result.innerHTML = `👍 Хорошо: ${score} из 5 (${percent}%).`;
+    else                  result.innerHTML = `📚 Есть куда расти: ${score} из 5 (${percent}).`;
+}
+</script>
+
+</body>
+</html>
